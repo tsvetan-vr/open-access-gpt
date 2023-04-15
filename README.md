@@ -40,6 +40,36 @@ Your API key is stored only on your device and never transmitted to anyone excep
 3. Navigate to the `app` folder of the repository and execute the command `npm install`.
 4. Start the app via the command `npm start`. The web app will be available on [http://localhost:3000](http://localhost:3000).
 
+## Run Locally with Kubernets ( Kind ) cluster ( linux only )
+1. Clone the repository in your local computer.
+2. Install tilt, ctlptl and kind 
+> https://docs.tilt.dev/install.html
+> https://github.com/tilt-dev/ctlptl/blob/main/INSTALL.md
+> https://kind.sigs.k8s.io/docs/user/quick-start/
+
+3. Run `setup.sh` script
+  - when you see the following
+    ```
+      Tilt started on http://localhost:10350/
+    v0.30.12, built 2022-11-16
+
+    (space) to open the browser
+    (s) to stream logs (--stream=true)
+    (t) to open legacy terminal mode (--legacy=true)
+    (ctrl-c) to exit
+    ```
+
+    you can press the space bar and the Tilt UI will open in your browser at localhost:10350,
+    there, you'll be able to see the deployment progress of openaccessgpt code.
+    [Tilt](doc/tilt.png)
+  - Once you've done coding,if you press Ctrl-C, the script will delete the cluster and
+  	cleanup all resources.
+  	It will also ask if you want to remove all images built available on your machine.
+
+4. Once the deployment is completed you'll be able to reach OpenAccessGPT at
+> https://local-dev.duckdns.org ( which actually points to localhost)
+[OAG](doc/openaccessgpt.png)
+
 ## License
 
 Open Access GPT is licensed under the MIT license. See the LICENSE file for more information.

@@ -1,0 +1,55 @@
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+load('ext://namespace', 'namespace_create')
+load('ext://cert_manager', 'deploy_cert_manager')
+update_settings (k8s_upsert_timeout_secs = 60)
+secret_settings( disable_scrub = True )
+
+def cert_manager(commonName,version="v1.9.1",secretName="certificate",namespace="default"):
+  deploy_cert_manager(version=version)
+  certificate(commonName=commonName,secretName=secretName,namespace=namespace)
+
+def build(service,skips_local_docker=True,dockerfile="Dockerfile"):
+  test=custom_build(
+    service,
+    'docker run \
+    -v $PWD:/workspace \
+    --rm \
+    --net=host \
+    gcr.io/kaniko-project/executor:latest \
+    --dockerfile /workspace/{dockerfile} \
+    --destination "$EXPECTED_REF" \
+    --context dir:///workspace/ '.format(dockerfile=dockerfile),
+    ['.'],
+    skips_local_docker=skips_local_docker,
+  )
+
+def certificate(commonName,secretName="certificate",namespace="default"):
+  issuer="""
+  apiVersion: cert-manager.io/v1
+  kind: ClusterIssuer
+  metadata:
+    name: selfsigned-issuer
+  spec:
+    selfSigned: {}
+  """
+  certificate="""
+  apiVersion: cert-manager.io/v1
+  kind: Certificate
+  metadata:
+    name: certificate
+    namespace: {namespace}
+  spec:
+    isCA: false
+    commonName: {commonName}
+    secretName: {secretName}
+    privateKey:
+      algorithm: ECDSA
+      size: 256
+    issuerRef:
+      name: selfsigned-issuer
+      kind: ClusterIssuer
+      group: cert-manager.io
+  """
+  template=certificate.format(commonName=commonName,secretName=secretName,namespace=namespace)
+  print("Creating Issuer & SelfSigned Certificate")
+  k8s_yaml([blob(template),blob(issuer)],allow_duplicates=True)

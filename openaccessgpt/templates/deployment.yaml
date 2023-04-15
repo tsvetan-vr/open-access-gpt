@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openaccessgpt.fullname" . }}
+  namespace: {{ include "openaccessgpt.namespace" . }}
+  labels:
+    {{- include "openaccessgpt.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "openaccessgpt.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        # The following annotations make sure that in case of
+        # update/upgrade a new deployment gets triggered
+        checksum/install_info: {{ printf "%s-%s" .Chart.Name .Chart.Version | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "openaccessgpt.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "openaccessgpt.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: openaccessgpt
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+#          envFrom:
+#          - configMapRef:
+#              name: {{ include "openaccessgpt.fullname" . }}-config
+#              optional: false
+#          - secretRef:
+#              name: {{ include "openaccessgpt.fullname" . }}-secret
+#              optional: false
+          ports:
+            - name: http
+              containerPort: {{ ((.Values).configMap).servicePort | default "3000" }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.configMap.tls.enabled  }}
+            {{- with ((.Values).probes).liveness }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.configMap.tls.enabled }}
+            {{- with ((.Values).probes).readiness }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep {{ ((.Values).configMap).preStopTimeout }}"]
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      terminationGracePeriodSeconds: {{ add ((.Values).configMap).preStopTimeout 5 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
