@@ -61,14 +61,15 @@ Your API key is stored only on your device and never transmitted to anyone excep
 
     you can press the space bar and the Tilt UI will open in your browser at localhost:10350,
     there, you'll be able to see the deployment progress of openaccessgpt code.
-    [Tilt](doc/tilt.png)
+    ![Tilt](doc/tilt.png)
   - Once you've done coding,if you press Ctrl-C, the script will delete the cluster and
   	cleanup all resources.
   	It will also ask if you want to remove all images built available on your machine.
 
 4. Once the deployment is completed you'll be able to reach OpenAccessGPT at
 > https://local-dev.duckdns.org ( which actually points to localhost)
-[OAG](doc/openaccessgpt.png)
+
+![OAG](doc/openaccessgpt.png)
 
 ## License
 
