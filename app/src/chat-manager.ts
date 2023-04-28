@@ -343,8 +343,9 @@ export class Search {
         }
     }
 
-    public delete(id: string) {
+    public async delete(id: string) {
         this.index.remove({ id });
+        await idb.del(id);
     }
 
     public query(query: string) {

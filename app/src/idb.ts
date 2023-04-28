@@ -83,7 +83,10 @@ export async function del(key: string) {
     inMemoryCache.delete(key);
     if (supported) {
         try {
-            await idb.del(key);
+            const chats = await get('chats');
+            const indexToRemove = chats && chats.findIndex((chat) => chat.id === key)
+            indexToRemove !== -1 && chats.splice(indexToRemove, 1);
+            await set('chats', chats);
             return;
         } catch (e) {}
     }
