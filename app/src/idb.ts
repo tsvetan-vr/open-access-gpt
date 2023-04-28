@@ -84,9 +84,11 @@ export async function del(key: string) {
     if (supported) {
         try {
             const chats = await get('chats');
-            const indexToRemove = chats && chats.findIndex((chat) => chat.id === key)
-            indexToRemove !== -1 && chats.splice(indexToRemove, 1);
-            await set('chats', chats);
+            const indexToRemove = chats.findIndex((chat) => chat.id === key)
+            if (indexToRemove !== -1) {
+                chats.splice(indexToRemove, 1);
+                await set('chats', chats);
+            }
             return;
         } catch (e) {}
     }
