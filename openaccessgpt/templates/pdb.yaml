@@ -1,0 +1,19 @@
+{{- if and .Values.pdb (.Values.pdb.minAvailable) (.Values.pdb.maxUnavailable) }}
+{{- else if and .Values.pdb (or .Values.pdb.minAvailable (.Values.pdb.maxUnavailable)) }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "openaccessgpt.fullname" . }}
+  namespace: {{ include "openaccessgpt.namespace" . }}
+  labels:
+    {{- include "openaccessgpt.labels" . | nindent 4 }}
+spec:
+  {{- if and .Values.pdb.minAvailable (not .Values.pdb.maxUnavailable)}}
+  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- else if and .Values.pdb.maxUnavailable (not .Values.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "openaccessgpt.selectorLabels" . | nindent 6 }}
+{{- end }}
