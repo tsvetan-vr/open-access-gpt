@@ -4,8 +4,8 @@ import { FileUpload } from 'tabler-icons-react';
 import { useElementSize } from '@mantine/hooks';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { backend } from '../../backend';
-import { useAppContext } from '../../context';
+import { backend } from '../../core/backend';
+import { useAppContext } from '../../core/context';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { setTab } from '../../store/settings-ui';
 import { selectSidebarOpen, toggleSidebar } from '../../store/sidebar';
@@ -110,41 +110,19 @@ export default function Sidebar(props: {
     const onBurgerClick = useCallback(() => dispatch(toggleSidebar()), [dispatch]);
     const { ref, width } = useElementSize();
 
-    const recentChats = context.chat.search.query('');
-
-    const exportChats = useCallback(() => {
-        context.chat.pull().then((chats) => {
-            const fileData = JSON.stringify(chats);
-            const blob = new Blob([fileData], { type: "json/application" });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.download = Date.now()+"_exported_openai_chats.json";
-            link.href = url;
-            link.click();
-        });
-    }, [context.chat]);
-
     const [value, setValue] = useState<File | null>(null);
 
+    const [version, setVersion] = useState(0);
+    const update = useCallback(() => {
+        setVersion(v => v + 1);
+    }, []);
+    
     useEffect(() => {
-        let file = value;
-        if (!file) {
-          return;
-        }
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            let content = e?.target?.result;
-            if (content) {
-                const arrayBuffer = content instanceof ArrayBuffer ? content : new TextEncoder().encode(content);
-                const decoder = new TextDecoder();
-                const decodedContent = decoder.decode(arrayBuffer);
-                const parsedContent = JSON.parse(decodedContent);
-                context.chat.push(parsedContent);
-                window.location.reload();
-            }
+        context.chat.on('update', update);
+        return () => {
+            context.chat.off('update', update);
         };
-        reader.readAsArrayBuffer(file);
-    }, [context.chat, value])
+    }, []);
 
     const burgerLabel = sidebarOpen
         ? intl.formatMessage({ defaultMessage: "Close sidebar" })
@@ -159,14 +137,14 @@ export default function Sidebar(props: {
             <div className="sidebar-content">
                 <RecentChats />
             </div>
-            {backend.current && backend.current.isAuthenticated && (
+            {context.authenticated && (
                 <Menu width={width - 20}>
                     <Menu.Target>
                         <div className="sidebar-footer">
-                            <Avatar size="lg" src={backend.current!.user!.avatar} />
+                            <Avatar size="lg" src={context.user!.avatar} />
                             <div className="user-info">
-                                <strong>{backend.current!.user!.name || backend.current!.user!.email}</strong>
-                                {!!backend.current!.user!.name && <span>{backend.current.user!.email}</span>}
+                                <strong>{context.user!.name || context.user!.email}</strong>
+                                {!!context.user!.name && <span>{context.user!.email}</span>}
                             </div>
                             <div className="spacer" />
 
@@ -181,25 +159,17 @@ export default function Sidebar(props: {
                         }} icon={<i className="fas fa-gear" />}>
                             <FormattedMessage defaultMessage={"User settings"} description="Menu item that opens the user settings screen" />
                         </Menu.Item>
-                        {/*
+
                         <Menu.Divider />
                         <Menu.Item color="red" onClick={() => backend.current?.logout()} icon={<i className="fas fa-sign-out-alt" />}>
                             <FormattedMessage defaultMessage={"Sign out"} />
-                        </Menu.Item> 
-                        */}
+                        </Menu.Item>
+
                     </Menu.Dropdown>
                 </Menu>
             )}
-                {recentChats.length === 0 ? <Flex gap="md">
-                    <FileInput variant="filled" style={{margin: '0 auto'}} accept="application/json" value={value} onChange={setValue} placeholder={intl.formatMessage({defaultMessage: "Import Chats"})} icon={<FileUpload size={20} />} />
-                    {/* <Button variant="light" fullWidth onClick={importChats}> */}
-                </Flex> : <Flex gap="md">
-                    <Button variant="light" fullWidth onClick={exportChats}>
-                        <FormattedMessage defaultMessage={"Export all Chats"} />
-                    </Button>
-                </Flex>}
         </Container>
-    ), [sidebarOpen, ref, onBurgerClick, burgerLabel, width, recentChats.length, value, intl, exportChats, dispatch]);
+    ), [sidebarOpen, ref, onBurgerClick, burgerLabel, context.authenticated, context.user, width, dispatch]);
 
     return elem;
 }

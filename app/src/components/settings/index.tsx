@@ -1,13 +1,14 @@
 import styled from '@emotion/styled';
 import { Button, Drawer, Tabs } from "@mantine/core";
 import { useMediaQuery } from '@mantine/hooks';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import UserOptionsTab from './user';
-import GenerationOptionsTab from './options';
+import ChatOptionsTab from './chat';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { closeSettingsUI, selectSettingsTab, setTab } from '../../store/settings-ui';
+import { closeSettingsUI, selectSettingsOption, selectSettingsTab, setTab } from '../../store/settings-ui';
 import SpeechOptionsTab from './speech';
 import { FormattedMessage, useIntl } from 'react-intl';
+import UIPreferencesTab from './ui-preferences';
 
 const Container = styled.div`
     padding: .4rem 1rem 1rem 1rem;
@@ -76,13 +77,21 @@ export interface SettingsDrawerProps {
 
 export default function SettingsDrawer(props: SettingsDrawerProps) {
     const tab = useAppSelector(selectSettingsTab);
+    const option = useAppSelector(selectSettingsOption);
     const small = useMediaQuery('(max-width: 40em)');
 
     const dispatch = useAppDispatch();
     const close = useCallback(() => dispatch(closeSettingsUI()), [dispatch]);
     const onTabChange = useCallback((tab: string) => dispatch(setTab(tab)), [dispatch]);
 
+
     const intl = useIntl();
+
+    useEffect(() => {
+        setTimeout(() => {
+            document.querySelector('.focused')?.scrollIntoView();
+        }, 1000);
+    }, [tab, option]);
 
     return (
         <Drawer size="50rem"
@@ -95,13 +104,16 @@ export default function SettingsDrawer(props: SettingsDrawerProps) {
             <Container>
                 <Tabs value={tab} onTabChange={onTabChange} style={{ margin: '0rem' }}>
                     <Tabs.List grow={small}>
-                        <Tabs.Tab value="options">{intl.formatMessage({ defaultMessage: 'Options'})}</Tabs.Tab>
-                        <Tabs.Tab value="user">{intl.formatMessage({ defaultMessage: 'User'})}</Tabs.Tab>
+                        <Tabs.Tab value="chat">Chat</Tabs.Tab>
                         <Tabs.Tab value="speech">{intl.formatMessage({ defaultMessage: 'Speech'})}</Tabs.Tab>
+                        <Tabs.Tab value="ui">UI</Tabs.Tab>
+                        <Tabs.Tab value="user">{intl.formatMessage({ defaultMessage: 'User'})}</Tabs.Tab>
+
                     </Tabs.List>
-                    <UserOptionsTab />
-                    <GenerationOptionsTab />
+                    <ChatOptionsTab />
                     <SpeechOptionsTab />
+                    <UIPreferencesTab />
+                    <UserOptionsTab />
                 </Tabs>
                 <div id="save">
                     <Button variant="light" fullWidth size="md" onClick={close}>

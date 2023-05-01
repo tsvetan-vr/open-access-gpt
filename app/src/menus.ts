@@ -10,4 +10,9 @@ export const secondaryMenu: MenuItem[] = [
         link: "https://github.com/OpenAccessGPT/open-access-gpt",
         icon: "github fab",
     },
+    {
+        label: "Feedback",
+        link: "https://tally.so/r/3lBZko",
+        icon: "comment",
+    },    
 ];

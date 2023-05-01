@@ -10,6 +10,9 @@
       "defaultMessage": "Impostazioni utente",
       "description": "Menu item that opens the user settings screen"
     },
+    "0HTf4+": {
+      "defaultMessage": "Importa e Esporta"
+    },  
     "0vL5u1": {
       "defaultMessage": "Crea un account"
     },
@@ -43,9 +46,9 @@
     "74eGxP": {
       "defaultMessage": "Nuova chat",
       "description": "Label for the button used to start a new chat session"
-    },
-    "81FYd4": {
-      "defaultMessage": "Esporta tutte le chat"
+    }, 
+    "79mYop": {
+      "defaultMessage": "Tokens massimi: {value}"
     },  
     "8CYNFt": {
       "defaultMessage": "Ancora nessuna chat.",
@@ -65,6 +68,9 @@
     "CJwO9s": {
       "defaultMessage": "GPT 3.5 Turbo (default)"
     },
+    "DWnFkx": {
+      "defaultMessage": "Seleziona un Provider da-testo-a-parlato"
+    },  
     "EwRIOm": {
       "defaultMessage": "Utente"
     },  
@@ -79,22 +85,21 @@
     "HyS0qp": {
       "defaultMessage": "Chiudi la barra laterale"
     },
-    "JpZMMj": {
-      "defaultMessage": "Voce",
-      "description": "Heading for the setting that lets users choose an ElevenLabs text-to-speech voice, on the settings screen"
-    },
     "KKa5Br": {
       "defaultMessage": "Fornisci a ChatGPT una voce umana realistica collegando il tuo account ElevenLabs (puoi ascoltare in anteprima le voci disponibili, come indicato sotto). <a>Fai clic qui per iscriverti.</a>"
     },
+    "KbUcBc": {
+      "defaultMessage": "La tua Chiave API di ElevenLabs"
+    },  
     "L5s+z7": {
       "defaultMessage": "L'utilizzo della chiave API OpenAI viene fatturato a una tariffa con pagamento in base al consumo, separata dal costo dell'abbonamento di ChatGPT."
     },
+    "LNB3XB": {
+      "defaultMessage": "Utilizza la API di OpenAI Whisper API per il riconoscimento del parlato"
+    },  
     "MI5gZ+": {
       "defaultMessage": "Scarica SVG"
     },
-    "NDV5Mq": {
-      "defaultMessage": "Opzioni"
-    },  
     "NRJ4IQ": {
       "defaultMessage": "Nota: GPT-4 funzionerà solo se al tuo account OpenAI è stato concesso l'accesso al nuovo modello. <a>Richiedi l'accesso qui.</a>"
     },
@@ -129,15 +134,11 @@
     "T8gKkC": {
       "defaultMessage": "Elimina questa chat"
     },  
+    "UR9oCV": {
+      "defaultMessage": "Mostra il microfono nell'input del messaggio"
+    },  
     "VL24Xt": {
       "defaultMessage": "Cerca le tue chat"
-    },
-    "WOuVxP": {
-      "defaultMessage": "Modello",
-      "description": "Heading for the setting that lets users choose a model to interact with, on the settings screen"
-    },
-    "WigL9h": {
-      "defaultMessage": "Importa chat"
     },  
     "Xzm66E": {
       "defaultMessage": "Collega il tuo account OpenAI per iniziare"
@@ -154,9 +155,18 @@
       "defaultMessage": "Prompt di Sistema",
       "description": "Heading for the setting that lets users customize the System Prompt, on the settings screen"
     },
+    "c60o5M": {
+      "defaultMessage": "La tua Chiave API di OpenAI"
+    },  
     "cmcjSh": {
       "defaultMessage": "Anteprima della voce",
       "description": "Label for the button that plays a preview of the selected ElevenLabs text-to-speech voice"
+    },
+    "cG0Q8M": {
+      "defaultMessage": "Temperatura"
+    },
+    "cXeWz0": {
+      "defaultMessage": "Cerca di includere sempre il tuo primo messaggio"
     },
     "dFuUS4": {
       "defaultMessage": "Parlata"
@@ -169,6 +179,9 @@
       "defaultMessage": "Condividi",
       "description": "Label for a button which shares the text of a chat message using the user device's share functionality"
     },
+    "h9+jXQ": {
+      "defaultMessage": "Il prompt di sistema è un messaggio invisibile inserito all'inizio della chat e può essere utilizzato per fornire a ChatGPT informazioni su se stesso e linee guida generali su come dovrebbe rispondere. Il tag <code>'{{ datetime }}'</code> viene automaticamente sostituito dalla data e dall'ora correnti (utilizzalo per consentire all'AI di accedere all'ora)."
+    },  
     "hJZwTS": {
       "defaultMessage": "Indirizzo email"
     },
@@ -179,6 +192,9 @@
       "defaultMessage": "Salva e chiudi",
       "description": "Label for the button that closes the Settings screen, saving any changes"
     },
+    "jU4MQH": {
+      "defaultMessage": "Rinomina questa chat"
+    },  
     "jtu3jt": {
       "defaultMessage": "Puoi trovare la tua chiave API facendo clic sul tuo avatar o sulle iniziali in alto a destra nel sito Web di ElevenLabs, poi facendo clic su Profilo. La tua chiave API è memorizzata solo su questo dispositivo e mai trasmessa a nessuno tranne ElevenLabs."
     },
@@ -186,17 +202,25 @@
       "defaultMessage": "Copiato",
       "description": "Label for copy-to-clipboard button after a successful copy"
     },
-    "pv41j8": {
-      "defaultMessage": "Temperatura: {temperature, number, ::.0}",
-      "description": "Label for the button that opens a modal for setting the 'temperature' (randomness) of AI responses"
+    "lxBBL0": {
+      "defaultMessage": "Cerca di includere sempre il prompt di sistema"
     },
-    "qd3nrR": {
-      "defaultMessage": "Inviaci il tuo feedback"
+    "mL4Q28": {
+      "defaultMessage": "ID della Voce Personalizzata"
+    },  
+    "mhtiX2": {
+      "defaultMessage": "Personalizza il prompt di sistema"
+    },
+    "mnJYBQ": {
+      "defaultMessage": "Voce"
     },  
     "raQMIg": {
       "defaultMessage": "Cancella",
       "description": "Label for a button that appears when the user is editing the text of one of their messages, to cancel without saving changes"
     },
+    "rhSI1/": {
+      "defaultMessage": "Modello"
+    },  
     "role-chatgpt": {
       "defaultMessage": "ChatGPT",
       "description": "Label that is shown above messages written by the AI (as opposed to the user)"
@@ -213,31 +237,25 @@
       "defaultMessage": "Utente",
       "description": "Label that is shown above messages written by the user (as opposed to the AI) for publicly shared conversation (third person, formal)."
     },
-    "rvoorh": {
-      "defaultMessage": "Il prompt di sistema viene indicato a ChatGPT dal 'Sistema' prima del tuo primo messaggio. Il tag <code>'{{ datetime }}'</code> viene automaticamente sostituito dalla data e dall'ora correnti."
-    },
+    "rq6lHK": {
+      "defaultMessage": "Includi un massimo di {value} tokens"
+    },  
     "ss6kle": {
       "defaultMessage": "Ripristina le impostazioni predefinite"
-    },
-    "sskUPZ": {
-      "defaultMessage": "La tua chiave API di sintesi vocale di ElevenLabs (opzionale)",
-      "description": "Heading for the ElevenLabs API key setting on the settings screen"
     },
     "tZdXp/": {
       "defaultMessage": "Il parametro della temperatura controlla la casualità delle risposte dell'IA. Valori più bassi renderanno l'IA più prevedibile, mentre valori più alti la renderanno più creativa."
     },
+    "ultnLc": {
+      "defaultMessage": "Leggi i messaggi ad alta voce automaticamente"
+    },  
     "upBSoW": {
       "defaultMessage": "Copia",
       "description": "Label for copy-to-clipboard button"
     },
-    "w5Dmuu": {
-      "defaultMessage": "Personalizza il prompt di sistema",
-      "description": "Label for the button that opens a modal for customizing the 'system prompt', a message used to customize and influence how the AI responds."
-    },
-    "y1F8Hs": {
-      "defaultMessage": "La tua chiave API di OpenAI API",
-      "description": "Heading for the OpenAI API key setting on the settings screen"
-    },
+    "xXbJso": {
+      "defaultMessage": "Disconnettiti"
+    },  
     "zBmup+": {
       "defaultMessage": "Rigenera",
       "description": "Label for the button used to ask the AI to regenerate one of its messages. Since message generations are stochastic, the resulting message will be different."

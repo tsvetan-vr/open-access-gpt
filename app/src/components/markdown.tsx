@@ -75,7 +75,7 @@ export function Markdown(props: MarkdownProps) {
                 rehypePlugins={[rehypeKatex]}
                 components={{
                     ol({ start, children }) {
-                        return <ol start={start ?? 1} style={{ counterReset: `list-item ${(start || 1) - 1}` }}>
+                        return <ol start={start ?? 1} style={{ counterReset: `list-item ${(start || 1)}` }}>
                             {children}
                         </ol>;
                     },
@@ -119,7 +119,7 @@ export function Markdown(props: MarkdownProps) {
                             </Code>
                             {code.startsWith('<svg') && code.includes('</svg>') && (
                                 <ImagePreview>
-                                    <img src={`data:image/svg+xml;base64,${btoa(code)}`} />
+                                    <img alt="" src={`data:image/svg+xml;base64,${btoa(code)}`} />
                                 </ImagePreview>
                             )}
                         </>) : (
@@ -130,7 +130,7 @@ export function Markdown(props: MarkdownProps) {
                     }
                 }}>{props.content}</ReactMarkdown>
         </div>
-    ), [props.content, classes, intl]);
+    ), [props.content, classes]);
 
     return elem;
 }
