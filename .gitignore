@@ -137,3 +137,5 @@ out
 .yarn/install-state.gz
 .pnp.*
 .DS_Store
+
+.prettierignore
