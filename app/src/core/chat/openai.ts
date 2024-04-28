@@ -1,5 +1,5 @@
 import EventEmitter from "events";
-import { Configuration, OpenAIApi } from "openai";
+// import { Configuration, OpenAIApi } from "openai";
 import SSE from "../utils/sse";
 import { OpenAIMessage, Parameters } from "./types";
 import { backend } from "../backend";
@@ -32,21 +32,17 @@ export interface OpenAIResponseChunk {
 }
 
 function parseResponseChunk(buffer: any): OpenAIResponseChunk {
-    const chunk = buffer.toString().replace('data: ', '').trim();
-
-    if (chunk === '[DONE]') {
-        return {
-            done: true,
-        };
+    const chunks: any[] = [];
+    for (let i = 0; i < buffer.length; i++) {
+      const rawChunk = buffer[i];
+      chunks.push(JSON.parse(rawChunk));
     }
 
-    const parsed = JSON.parse(chunk);
-
     return {
-        id: parsed.id,
-        done: false,
-        choices: parsed.choices,
-        model: parsed.model,
+      id: chunks[0].id,
+      done: false,
+      choices: chunks.map((chunk) => chunk.choices).flat(),
+      model: chunks[0].model,
     };
 }
 
@@ -115,7 +111,7 @@ export async function createStreamingChatCompletion(messages: OpenAIMessage[], p
     });
 
     eventSource.addEventListener('message', async (event: any) => {
-        if (event.data === '[DONE]') {
+        if (event.data[0] === '[DONE]') {
             emitter.emit('done');
             return;
         }
@@ -123,7 +119,10 @@ export async function createStreamingChatCompletion(messages: OpenAIMessage[], p
         try {
             const chunk = parseResponseChunk(event.data);
             if (chunk.choices && chunk.choices.length > 0) {
-                contents += chunk.choices[0]?.delta?.content || '';
+                for (let i = 0; i < chunk.choices.length; i++) {
+                  const choice = chunk.choices[i];
+                  contents += choice.delta?.content || "";
+                }
                 emitter.emit('data', contents);
             }
         } catch (e) {
