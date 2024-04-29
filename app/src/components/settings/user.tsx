@@ -35,12 +35,13 @@ export default function UserOptionsTab(props: any) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const json = e.target?.result as string;
-                    const data = JSON.parse(json) as Chat[];
+                    const data = JSON.parse(json);
                     if (data.length > 0) {
                         context.chat.doc.transact(() => {
                             for (const chat of data) {
                                 try {
-                                    importChat(doc, chat);
+                                    const chatParsed = JSON.parse(chat) as Chat;
+                                    importChat(doc, chatParsed);
                                 } catch (e) {
                                     console.error(e);
                                 }
